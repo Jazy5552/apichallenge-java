@@ -2,6 +2,7 @@ package jazy.apichallenge;
 
 import java.net.*;
 import java.io.*;
+
 import org.json.*;
 
 public class Main {
@@ -14,7 +15,7 @@ public class Main {
 			JSONObject reci;
 			String token;
 			
-			//Prestage (Send info and get token)
+			//STAGE 0 (Send info and get token)
 			send = new JSONObject();
 			send.put("email","jazy555@hotmail.com");
 			send.put("github","https://github.com/Jazy5552");
@@ -25,8 +26,8 @@ public class Main {
 			
 			token = reci.getString("result");
 			System.out.println("Token: " + token);
-			
-			//Stage 1 (Reverse string)
+			/*
+			//STAGE 1 (Reverse string)
 			send = new JSONObject();
 			send.put("token", reci.getString("result"));
 			
@@ -41,14 +42,50 @@ public class Main {
 			send.put("token", token);
 			send.put("string", tmp);
 			
-			System.out.println(reci.toString());
-			System.out.println(send.toString());
 			
 			br = postStringToSite(send.toString(), "http://challenge.code2040.org/api/validatestring");
 
+			System.out.println(reci.toString());
+			System.out.println(send.toString());
 			System.out.println(br.readLine());
 			br.close();
 			//END OF STAGE 1
+			*/
+			
+			//STAGE 2
+			
+			send = new JSONObject();
+			send.put("token", token);
+			br = postStringToSite(send.toString(), "http://challenge.code2040.org/api/haystack");
+			
+			reci = new JSONObject(br.readLine());
+			br.close();
+			
+			JSONObject haystack = reci.getJSONObject("result");
+			JSONArray hay = haystack.getJSONArray("haystack");
+			String n = haystack.getString("needle");
+			
+			int needle;
+			for (needle = 0; needle < hay.length(); needle++)
+			{
+				if (hay.getString(needle).equals(n))
+				{
+					break; //needle stores the position
+				}
+			}
+			
+			send = new JSONObject();
+			send.put("token", token);
+			send.put("needle", needle);
+			
+			br = postStringToSite(send.toString(), "http://challenge.code2040.org/api/validateneedle");
+
+			System.out.println(reci.toString());
+			System.out.println(send.toString());
+			System.out.println(br.readLine());
+			br.close();
+			
+			//END OF STAGE 2
 			
 		}
 		catch(Exception e)
