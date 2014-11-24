@@ -17,7 +17,7 @@ public class Main {
 		// STAGE 0 (Send info and get token)
 		
 		send = new JSONObject();
-		send.put("email", "jazy555@gmail.com");
+		send.put("email", "jazy555@hotmail.com");
 		send.put("github", "https://github.com/Jazy5552");
 
 		br = postStringToSite(send.toString(),
